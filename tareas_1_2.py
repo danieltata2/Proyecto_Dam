@@ -23,8 +23,8 @@ def main(page: ft.Page):
     opcion_drop = ft.Dropdown(
         label="Selecciona opción", width=400,
         options=[
-            ft.dropdown.Option("Control Usuarios"),
-            ft.dropdown.Option("Copia Seguridad"),
+            ft.DropdownOption("Control Usuarios"),
+            ft.DropdownOption("Copia Seguridad"),
         ],
         on_change=ir_a_vista
     )
@@ -95,13 +95,13 @@ def main(page: ft.Page):
 
         # Dropdown para seleccionar el día de la semana
         day_dropdown = ft.Dropdown(label="Día de la Semana", width=400,
-                                   options=[ft.dropdown.Option(i) for i in days_of_week])
+                                   options=[ft.DropdownOption(i) for i in days_of_week])
 
         minutes = [str(i).zfill(2) for i in range(60)]
         hours = [str(i).zfill(2) for i in range(24)]
 
-        minute_dropdown = ft.Dropdown(label="Minuto", width=400, options=[ft.dropdown.Option(i) for i in minutes])
-        hour_dropdown = ft.Dropdown(label="Hora", width=400, options=[ft.dropdown.Option(i) for i in hours])
+        minute_dropdown = ft.Dropdown(label="Minuto", width=400, options=[ft.DropdownOption(i) for i in minutes])
+        hour_dropdown = ft.Dropdown(label="Hora", width=400, options=[ft.DropdownOption(i) for i in hours])
 
         result_text = ft.Text()
 
@@ -164,4 +164,4 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main, view=ft.WEB_BROWSER, port=30040)

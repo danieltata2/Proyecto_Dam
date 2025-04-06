@@ -1,5 +1,7 @@
 import flet as ft
-from bbddUsuarios import *
+from flet.core import view
+
+from bbdd import *
 from datetime import datetime
 
 
@@ -111,7 +113,7 @@ def main(page: ft.Page):
             set_mensaje("Email/Usuario o contraseña incorrectos. Por favor, intenta nuevamente.", "red")
 
     def iniciar_aplicacion(e):
-        import selectorDeAccion  # Aquí se importa el archivo ActionSelector.py
+        import tareas_1_2  # Aquí se importa el archivo ActionSelector.py
         selectorDeAccion.main(page)  # Llamar a la función principal del archivo ActionSelector
 
     def mostrar_home(nombre_usuario, ultimo_login, es_admin=False):
@@ -167,4 +169,4 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main, view=ft.WEB_BROWSER, port=30039)
