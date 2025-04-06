@@ -64,7 +64,7 @@ def main(page: ft.Page):
 
         # Registrar usuario con nombre de usuario, apellidos, email, password, fecha de nacimiento y rol
         msg = registrar_usuario(nombre_usuario.value, apellidos.value, email.value, password.value,
-                                fecha_nacimiento.value, rol.value)
+                                fecha_nacimiento.value)
         set_mensaje(msg, "green" if "éxito" in msg else "red")
         if "éxito" in msg:
             limpiar_campos()
@@ -111,8 +111,8 @@ def main(page: ft.Page):
             set_mensaje("Email/Usuario o contraseña incorrectos. Por favor, intenta nuevamente.", "red")
 
     def iniciar_aplicacion(e):
-        import ActionSelector  # Aquí se importa el archivo ActionSelector.py
-        ActionSelector.main(page)  # Llamar a la función principal del archivo ActionSelector
+        import selectorDeAccion  # Aquí se importa el archivo ActionSelector.py
+        selectorDeAccion.main(page)  # Llamar a la función principal del archivo ActionSelector
 
     def mostrar_home(nombre_usuario, ultimo_login, es_admin=False):
         page.clean()
