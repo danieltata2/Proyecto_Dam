@@ -1,6 +1,6 @@
 import flet as ft
 from flet.core import view
-
+import tareas_1_2
 from bbdd import *
 from datetime import datetime
 
@@ -114,7 +114,7 @@ def main(page: ft.Page):
 
     def iniciar_aplicacion(e):
         import tareas_1_2  # Aquí se importa el archivo ActionSelector.py
-        selectorDeAccion.main(page)  # Llamar a la función principal del archivo ActionSelector
+        tareas_1_2.main(page)  # Llamar a la función principal del archivo ActionSelector
 
     def mostrar_home(nombre_usuario, ultimo_login, es_admin=False):
         page.clean()
