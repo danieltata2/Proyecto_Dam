@@ -1,6 +1,7 @@
+# bbdd.py
 import psycopg2
 from datetime import datetime
-import psycopg2.errors
+import bcrypt  # Para cifrar las contraseñas
 
 def conectar_db():
     try:
@@ -8,9 +9,9 @@ def conectar_db():
             dbname="proyectoRafa",
             user="postgres",
             password="1234",
-            host="192.160.51.164",
+            host="localhost",  # Cambiar a la IP de tu servidor si es necesario
             port="5432",
-            client_encoding="UTF8"  # Asegura que la conexión use UTF-8
+            client_encoding="UTF8"
         )
         return conn
     except psycopg2.OperationalError as e:
@@ -22,14 +23,15 @@ def verificar_usuario(usuario, password):
     cur = conn.cursor()
     try:
         # Comprobar si el valor ingresado es un email o un nombre de usuario
-        query = "SELECT * FROM users WHERE (email = %s OR username = %s) AND password = %s"
-        cur.execute(query, (usuario, usuario, password))
+        query = "SELECT * FROM users WHERE (email = %s OR username = %s)"
+        cur.execute(query, (usuario, usuario))
         user = cur.fetchone()
-        if user:
+        if user and bcrypt.checkpw(password.encode('utf-8'), user[5].encode('utf-8')):  # Comparar contraseñas cifradas
             # Actualizamos el último login
             cur.execute("UPDATE users SET ultimo_login = %s WHERE email = %s", (datetime.now(), user[3]))  # Usamos el email para actualizar el último login
             conn.commit()
-        return user
+            return user
+        return None
     finally:
         cur.close()
         conn.close()
@@ -47,17 +49,19 @@ def registrar_usuario(nombre_usuario, apellidos_usuario, email, password, fecha_
         if cur.fetchone():
             return "Error: Nombre de usuario ya registrado"
 
+        # Cifrar la contraseña antes de almacenarla
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
         # Insertar el nuevo usuario con nombre, apellidos, nombre de usuario, email, password, fecha de nacimiento y rol
         cur.execute("""
             INSERT INTO users (nombre, apellidos, username, email, password, fechaNacimiento)
             VALUES (%s, %s, %s, %s, %s, %s)
-        """, (nombre_usuario, apellidos_usuario, nombre_usuario, email, password, fecha_nacimiento))
+        """, (nombre_usuario, apellidos_usuario, nombre_usuario, email, hashed_password.decode('utf-8'), fecha_nacimiento))
         conn.commit()
         return "Usuario registrado con éxito!"
     finally:
         cur.close()
         conn.close()
-
 
 def eliminar_usuario(user_id):
     conn = conectar_db()

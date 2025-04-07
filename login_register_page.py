@@ -1,6 +1,4 @@
 import flet as ft
-from flet.core import view
-import tareas_1_2
 from bbdd import *
 from datetime import datetime
 
@@ -64,7 +62,7 @@ def main(page: ft.Page):
             return
 
 
-        # Registrar usuario con nombre de usuario, apellidos, email, password, fecha de nacimiento y rol
+        # Registrar usuario con nombre de usuario, apellidos, email, password, fecha de nacimiento
         msg = registrar_usuario(nombre_usuario.value, apellidos.value, email.value, password.value,
                                 fecha_nacimiento.value)
         set_mensaje(msg, "green" if "éxito" in msg else "red")
@@ -116,36 +114,17 @@ def main(page: ft.Page):
         import tareas_1_2  # Aquí se importa el archivo ActionSelector.py
         tareas_1_2.main(page)  # Llamar a la función principal del archivo ActionSelector
 
-    def mostrar_home(nombre_usuario, ultimo_login, es_admin=False):
+    def mostrar_home(nombre_usuario, ultimo_login):
         page.clean()
         column_elements = [
             ft.Text(f"Bienvenido, {nombre_usuario}!", size=20, weight="bold", color="blue"),
             ft.Text(f"Último login: {ultimo_login}", size=14, italic=True, color="gray"),
             ft.ElevatedButton("Cerrar sesión", on_click=logout, bgcolor="blue", color="white"),
-            # Botón para eliminar la cuenta, ahora con la función eliminar definida
+            # Botón para eliminar la cuenta
             ft.ElevatedButton("Eliminar cuenta", on_click=eliminar, bgcolor="red", color="white")
         ]
 
-        # Si el usuario tiene rol de administrador, agregar el botón de "Panel de Administrador"
-        if es_admin:
-            column_elements.append(
-                ft.ElevatedButton("Panel de Administrador",
-                                  on_click=lambda e: panel_admin(nombre_usuario, ultimo_login), bgcolor="purple",
-                                  color="white")
-            )
-
         page.add(ft.Column(column_elements, alignment="center"))
-        page.update()
-
-    def panel_admin(nombre_usuario, ultimo_login):
-        page.clean()
-        page.add(
-            ft.Text("Bienvenido al Panel de Administrador", size=20, weight="bold", color="blue"),
-            # Aquí puedes agregar el contenido del panel de administrador
-            ft.ElevatedButton("Volver al inicio",
-                              on_click=lambda e: mostrar_home(nombre_usuario, ultimo_login, es_admin=True),
-                              bgcolor="gray", color="white")
-        )
         page.update()
 
     def eliminar(e):
